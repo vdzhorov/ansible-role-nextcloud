@@ -1,0 +1,22 @@
+---
+
+dependencies:
+  - ansible-role-mariadb
+  - ansible-role-nginx
+
+galaxy_info:
+  author: vdzhorov
+  description: Role for Nextcloud installation
+  company: "Delta.BG"
+  license: "license (MIT)"
+  min_ansible_version: 2.5
+  platforms:
+    - name: EL
+      versions:
+        - 7
+  galaxy_tags:
+    - linux
+    - nextcloud
+    - mysql
+    - php
+    - nginx
