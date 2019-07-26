@@ -13,3 +13,9 @@
     group: '{{ item.user }}'
     state: directory
   loop: '{{ websites }}'
+
+- name: Set correct permissions on user's home directory
+  file:
+    path: '/home/{{ item.user }}'
+    mode: 0755
+  loop: '{{ websites }}'
