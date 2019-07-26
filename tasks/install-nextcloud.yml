@@ -1,0 +1,16 @@
+---
+
+- name: Download Nextcloud
+  git:
+    repo: '{{ nextcloud_git_url }}'
+    dest: '/home/{{ item.user  }}/public_html'
+    version: master
+  loop: '{{ websites }}'
+
+- name: Set correct permissions on document_root
+  file:
+    path: '/home/{{ item.user }}/public_html'
+    owner: '{{ item.user }}'
+    group: '{{ item.user }}'
+    recurse: yes
+  loop: '{{ websites }}'
