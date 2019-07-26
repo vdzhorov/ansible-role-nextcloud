@@ -1,0 +1,6 @@
+---
+
+- include: pre-requisites.yml
+- include: setup-users.yml
+- include: database.yml
+- include: install-nextcloud.yml
