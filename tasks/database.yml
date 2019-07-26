@@ -1,0 +1,16 @@
+---
+
+- name: Create MySQL database
+  mysql_db:
+    name: '{{ item.user }}'
+    state: present
+  loop: '{{ websites }}'
+
+- name: Create MySQL user
+  mysql_user:
+    name: '{{ item.user }}'
+    password: '{{ item.mysql_password }}'
+    state: present
+    host: 'localhost'
+    priv: '{{ item.user }}.*:ALL'
+  loop: '{{ websites }}'
