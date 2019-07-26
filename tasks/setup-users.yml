@@ -1,0 +1,15 @@
+---
+
+- name: Create users for nextcloud
+  user:
+    name: '{{ item.user }}'
+    home: '/home/{{ item.user }}'
+  loop: '{{ websites }}'  
+
+- name: Create Nextcloud home directory
+  file:
+    path: '/home/{{ item.user }}/public_html'
+    owner: '{{ item.user }}'
+    group: '{{ item.user }}'
+    state: directory
+  loop: '{{ websites }}'
