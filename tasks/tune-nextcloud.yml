@@ -1,0 +1,9 @@
+---
+
+- name: Tune php.ini
+  ini_file:
+    path: /etc/php.ini
+    section: 'PHP'
+    option: '{{ item.key }}'
+    value: '{{ item.value }}'
+  loop: '{{ php_ini | dict2items }}'
