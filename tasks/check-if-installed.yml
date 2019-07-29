@@ -1,0 +1,7 @@
+---
+
+- name: Check if Nextcloud is already installed
+  stat:
+    path: '/home/{{ item.user }}/public_html/index.php'
+  register: nextcloud_installed
+  loop: '{{ websites }}'

@@ -1,5 +1,6 @@
 ---
 
+- include: check-if-installed.yml
 - include: pre-requisites.yml
 - include: setup-users.yml
 - include: database.yml
