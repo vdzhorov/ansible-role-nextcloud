@@ -3,8 +3,9 @@
 - name: Download Nextcloud
   git:
     repo: '{{ nextcloud_git_url }}'
-    dest: '/home/{{ item.user  }}/public_html'
+    dest: '/home/{{ item.user }}/public_html'
     version: master
+    update: no
   loop: '{{ websites }}'
 
 - name: Set correct permissions on document_root
@@ -14,3 +15,25 @@
     group: '{{ item.user }}'
     recurse: yes
   loop: '{{ websites }}'
+
+- name: Install Nextcloud
+  become: true
+  become_user: '{{ item.user }}'
+  command: |
+    php occ maintenance:install --database "mysql"
+    --database-name "{{ item.user }}"  --database-user "{{ item.user }}" --database-pass "{{ item.mysql_password }}"
+    --admin-user "{{ nextcloud_admin_user }}" --admin-pass "{{ item.nextcloud_admin_password }}"
+  args:
+    chdir: '/home/{{ item.user }}/public_html/'
+  loop: '{{ websites }}'
+  when: not nextcloud_installed
+
+- name: Add our domain as trusted_domain in Nextcloud installation
+  become: true
+  become_user: '{{ item.user }}'
+  command: 'php occ config:system:set trusted_domains 1 --value={{ item.domain }}'
+  args:
+    chdir: '/home/{{ item.user }}/public_html/'
+  loop: '{{ websites }}'
+  when: not nextcloud_installed
+
