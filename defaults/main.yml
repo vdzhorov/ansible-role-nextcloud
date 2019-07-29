@@ -1,8 +1,19 @@
 ---
 
-nextcloud_git_url: 'https://github.com/nextcloud/server.git'
+nc_git_url: 'https://github.com/nextcloud/server.git'
 
-php_ini:
+nc_php_ini:
   memory_limit: 512M
   upload_max_filesize: 100M
   post_max_size: 100M
+
+nc_php_opcache:
+  opcache.enable: 1
+  opcache.interned_strings_buffer: 8
+  opcache.max_accelerated_files: 10000
+  opcache.memory_consumption: 128
+  opcache.save_comments: 1
+  opcache.revalidate_freq: 1
+
+nc_redis_host: 127.0.0.1
+nc_redis_port: 6379
