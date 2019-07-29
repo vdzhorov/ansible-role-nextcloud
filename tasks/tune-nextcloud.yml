@@ -6,4 +6,59 @@
     section: 'PHP'
     option: '{{ item.key }}'
     value: '{{ item.value }}'
-  loop: '{{ php_ini | dict2items }}'
+  loop: '{{ nc_php_ini | dict2items }}'
+  notify: Restart PHP-FPM
+
+- name: Tune PHP opcache
+  ini_file:
+    path: '/etc/php.d/opcache.ini'
+    section: ''
+    option: '{{ item.key }}'
+    value: '{{ item.value }}'
+  loop: '{{ nc_php_opcache | dict2items }}'
+  notify: Restart PHP-FPM
+
+- name: Enable Redis as caching system
+  become: true
+  become_user: '{{ item.user }}'
+  command: php occ config:system:set redis host --value="{{ nc_redis_host }}"
+  args:
+    chdir: '/home/{{ item.user }}/public_html/'
+  loop: '{{ websites }}'
+  when: nc_redis_host is defined and nc_redis_port is defined
+
+- name: Enable Redis as caching system
+  become: true
+  become_user: '{{ item.user }}'
+  command: php occ config:system:set redis port --value="{{ nc_redis_port }}"
+  args:
+    chdir: '/home/{{ item.user }}/public_html/'
+  loop: '{{ websites }}'
+  when: nc_redis_host is defined and nc_redis_port is defined
+
+- name: Enable Redis as caching system
+  become: true
+  become_user: '{{ item.user }}'
+  command: php occ config:system:set redis dbindex --value=0
+  args:
+    chdir: '/home/{{ item.user }}/public_html/'
+  loop: '{{ websites }}'
+  when: nc_redis_host is defined and nc_redis_port is defined
+
+- name: Enable Redis as caching system
+  become: true
+  become_user: '{{ item.user }}'
+  command: php occ config:system:set redis timeout --value=1.5
+  args:
+    chdir: '/home/{{ item.user }}/public_html/'
+  loop: '{{ websites }}'
+  when: nc_redis_host is defined and nc_redis_port is defined
+
+- name: Set memcache.locking to Redis
+  become: true
+  become_user: '{{ item.user }}'
+  command: php occ config:system:set memcache.locking --value='\OC\Memcache\Redis'
+  args:
+    chdir: '/home/{{ item.user }}/public_html/'
+  loop: '{{ websites }}'
+  when: nc_redis_host is defined and nc_redis_port is defined
