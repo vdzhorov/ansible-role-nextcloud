@@ -6,3 +6,4 @@
 - include: database.yml
 - include: install-nextcloud.yml
 - include: tune-nextcloud.yml
+- include: security-nextcloud.yml
