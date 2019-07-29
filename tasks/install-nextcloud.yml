@@ -2,7 +2,7 @@
 
 - name: Download Nextcloud
   git:
-    repo: '{{ nextcloud_git_url }}'
+    repo: '{{ nc_git_url }}'
     dest: '/home/{{ item.user }}/public_html'
     version: master
     update: no
