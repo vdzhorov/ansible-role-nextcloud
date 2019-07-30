@@ -18,10 +18,5 @@
     nc_nextcloud_datadir: '{{ item.nextcloud_datadir }}'
   loop: '{{ websites }}'
 
-- include: check-if-installed.yml
-- include: pre-requisites.yml
-- include: setup-users.yml
-- include: database.yml
-- include: install-nextcloud.yml
-- include: tune-nextcloud.yml
-- include: security-nextcloud.yml
+- include_tasks: "{{ item }}"
+  loop: "{{ lookup('fileglob', './includes/*.yml').split(',') | sort }}"
