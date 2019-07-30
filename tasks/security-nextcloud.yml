@@ -1,36 +1,29 @@
 ---
 
-- set_fact:
-    new_datadir_tmp: '{{ item.nextcloud_datadir }}'
-  loop: '{{ websites }}'
-
 - name: Check if new datadir already exists
   stat:
-    path: '{{ new_datadir_tmp }}'
+    path: '{{ nc_nextcloud_datadir }}'
   register: new_datadir
 
 - name: Modify Nexcloud config in order to set new datadir
   become: true
-  become_user: '{{ item.user }}'
-  command: 'php occ config:system:set datadirectory --value="{{ item.nextcloud_datadir }}"'
+  become_user: '{{ nc_user }}'
+  command: 'php occ config:system:set datadirectory --value="{{ nc_nextcloud_datadir }}"'
   args:
-    chdir: '/home/{{ item.user }}/public_html/'
-  loop: '{{ websites }}'
+    chdir: '/home/{{ nc_user }}/public_html/'
   when: not new_datadir.stat.exists
 
 - name: Move default Nexcloud datadir
   copy:
-    src: '/home/{{ item.user }}/public_html/data/'
-    dest: '{{ item.nextcloud_datadir }}'
-    owner: '{{ item.user }}'
-    group: '{{ item.user }}'
+    src: '/home/{{ nc_user }}/public_html/data/'
+    dest: '{{ nc_nextcloud_datadir }}'
+    owner: '{{ nc_user }}'
+    group: '{{ nc_user }}'
     remote_src: yes
-  loop: '{{ websites }}'
   when: not new_datadir.stat.exists
 
 - name: Delete previous datadir
   file:
-    path: '/home/{{ item.user }}/public_html/data'
+    path: '/home/{{ nc_user }}/public_html/data'
     state: absent
-  loop: '{{ websites }}'
   when: not new_datadir.stat.exists

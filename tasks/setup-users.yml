@@ -2,20 +2,18 @@
 
 - name: Create users for nextcloud
   user:
-    name: '{{ item.user }}'
-    home: '/home/{{ item.user }}'
+    name: '{{ nc_user }}'
+    home: '/home/{{ nc_user }}'
   loop: '{{ websites }}'  
 
 - name: Create Nextcloud home directory
   file:
-    path: '/home/{{ item.user }}/public_html'
-    owner: '{{ item.user }}'
-    group: '{{ item.user }}'
+    path: '/home/{{ nc_user }}/public_html'
+    owner: '{{ nc_user }}'
+    group: '{{ nc_user }}'
     state: directory
-  loop: '{{ websites }}'
 
 - name: Set correct permissions on user's home directory
   file:
-    path: '/home/{{ item.user }}'
+    path: '/home/{{ nc_user }}'
     mode: 0755
-  loop: '{{ websites }}'

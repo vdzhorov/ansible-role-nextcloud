@@ -1,5 +1,23 @@
 ---
 
+- set_fact:
+    nc_domain: '{{ item.domain }}'
+    nc_user: '{{ item.user }}'
+    nc_preset: '{{ item.preset }}'
+    nc_ssl_enabled: '{{ item.ssl_enabled }}'
+    nc_ssl_crt_path: '{{ item.ssl_crt_path }}'
+    nc_ssl_key_path: '{{ item.ssl_key_path }}'
+    nc_gzip_enabled: '{{ item.gzip_enabled }}'
+    nc_expires_enabled: '{{ item.expires_enabled }}'
+    nc_security_headers_enabled: '{{ item.security_headers_enabled }}'
+    nc_mysql_username: '{{ item.mysql_username }}'
+    nc_mysql_database: '{{ item.mysql_database }}'
+    nc_mysql_password: '{{ item.mysql_password }}'
+    nc_nextcloud_admin_user: '{{ item.nextcloud_admin_user }}'
+    nc_nextcloud_admin_password: '{{ item.nextcloud_admin_password }}'
+    nc_nextcloud_datadir: '{{ item.nextcloud_datadir }}'
+  loop: '{{ websites }}'
+
 - include: check-if-installed.yml
 - include: pre-requisites.yml
 - include: setup-users.yml

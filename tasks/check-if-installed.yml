@@ -1,12 +1,8 @@
 ---
 
-- set_fact:
-    file_to_check: '/home/{{ item.user }}/public_html/index.php'
-  loop: '{{ websites }}'
-
 - name: Check if Nextcloud is already installed
   stat:
-    path: '{{ file_to_check }}'
+    path: '/home/{{ nc_user }}/public_html/index.php'
   register: nextcloud_installed_index
 
 - set_fact:

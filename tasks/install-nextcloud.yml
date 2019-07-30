@@ -3,37 +3,34 @@
 - name: Download Nextcloud
   git:
     repo: '{{ nc_git_url }}'
-    dest: '/home/{{ item.user }}/public_html'
+    dest: '/home/{{ nc_user }}/public_html'
     version: master
     update: no
-  loop: '{{ websites }}'
+  when: not nextcloud_installed or nextcloud_installed is undefined
 
 - name: Set correct permissions on document_root
   file:
-    path: '/home/{{ item.user }}/public_html'
-    owner: '{{ item.user }}'
-    group: '{{ item.user }}'
+    path: '/home/{{ nc_user }}/public_html'
+    owner: '{{ nc_user }}'
+    group: '{{ nc_user }}'
     recurse: yes
-  loop: '{{ websites }}'
 
 - name: Install Nextcloud
   become: true
-  become_user: '{{ item.user }}'
+  become_user: '{{ nc_user }}'
   command: |
     php occ maintenance:install --database "mysql"
-    --database-name "{{ item.user }}"  --database-user "{{ item.user }}" --database-pass "{{ item.mysql_password }}"
-    --admin-user "{{ nextcloud_admin_user }}" --admin-pass "{{ item.nextcloud_admin_password }}"
+    --database-name "{{ nc_mysql_database }}"  --database-user "{{ nc_mysql_username }}" --database-pass "{{ nc_mysql_password }}"
+    --admin-user "{{ nc_nextcloud_admin_user }}" --admin-pass "{{ nc_nextcloud_admin_password }}"
   args:
-    chdir: '/home/{{ item.user }}/public_html/'
-  loop: '{{ websites }}'
-  when: not nextcloud_installed
+    chdir: '/home/{{ nc_user }}/public_html/'
+  when: not nextcloud_installed or nextcloud_installed is undefined
 
 - name: Add our domain as trusted_domain in Nextcloud installation
   become: true
-  become_user: '{{ item.user }}'
-  command: 'php occ config:system:set trusted_domains 1 --value={{ item.domain }}'
+  become_user: '{{ nc_user }}'
+  command: 'php occ config:system:set trusted_domains 1 --value={{ nc_domain }}'
   args:
-    chdir: '/home/{{ item.user }}/public_html/'
-  loop: '{{ websites }}'
-  when: not nextcloud_installed
+    chdir: '/home/{{ nc_user }}/public_html/'
+  when: not nextcloud_installed or nextcloud_installed is undefined
 

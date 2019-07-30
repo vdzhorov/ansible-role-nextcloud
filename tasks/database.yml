@@ -2,15 +2,13 @@
 
 - name: Create MySQL database
   mysql_db:
-    name: '{{ item.user }}'
+    name: '{{ nc_mysql_database }}'
     state: present
-  loop: '{{ websites }}'
 
 - name: Create MySQL user
   mysql_user:
-    name: '{{ item.user }}'
-    password: '{{ item.mysql_password }}'
+    name: '{{ nc_mysql_username }}'
+    password: '{{ nc_mysql_password }}'
     state: present
     host: 'localhost'
-    priv: '{{ item.user }}.*:ALL'
-  loop: '{{ websites }}'
+    priv: '{{ nc_mysql_database }}.*:ALL'

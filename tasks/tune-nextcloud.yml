@@ -20,14 +20,14 @@
 
 - name: Enable Redis as caching system
   become: true
-  become_user: '{{ website_user }}'
+  become_user: '{{ nc_user }}'
   command: '{{ item }}'
   args:
-    chdir: '/home/{{ website_user }}/public_html/'
+    chdir: '/home/{{ nc_user }}/public_html/'
   loop:
     - 'php occ config:system:set redis host --value="{{ nc_redis_host }}"'
     - 'php occ config:system:set redis port --value="{{ nc_redis_port }}"'
     - 'php occ config:system:set redis dbindex --value=0'
     - 'php occ config:system:set redis timeout --value=1.5'
     - 'php occ config:system:set memcache.locking --value="\OC\Memcache\Redis"'
-  when: nc_redis_host is defined and nc_redis_port is defined and not nextcloud_installed
+  when: nc_redis_host is defined and nc_redis_port is defined and not nextcloud_installed or nextcloud_installed is undefined
